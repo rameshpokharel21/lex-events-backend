@@ -1,0 +1,32 @@
+server:
+  port: 9000
+spring:
+  application:
+    name: lex_events
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  app:
+    jwt:
+
+      secret: ${JWT_SECRET}
+      expirationMs: ${JWT_EXPIRATION}
+      cookie: ${JWT_COOKIE}
+app:
+  admin:
+    username: ${ADMIN_USERNAME}
+    password: ${ADMIN_PASSWORD}
+    email: ${ADMIN_EMAIL}
+    phone: ${ADMIN_PHONE}
+  user:
+    username: ${USER_USERNAME}
+    password: ${USER_PASSWORD}
+    email: ${USER_EMAIL}
+    phone: ${USER_PHONE}
+
+
