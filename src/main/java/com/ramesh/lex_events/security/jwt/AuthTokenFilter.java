@@ -34,15 +34,15 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
         try{
             String jwt = jwtUtils.getJwtFromCookie(request);
-            logger.debug("AuthTokenFilter.java: {}", jwt);
+            //logger.debug("AuthTokenFilter.java: {}", jwt);
 
             if(jwt != null && jwtUtils.validateJwtToken(jwt)){
                 String username = jwtUtils.getUsernameFromJwtToken(jwt);
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username.toLowerCase());
 
                 UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                logger.debug("Roles from JWT: {}", userDetails.getAuthorities());
+                //logger.debug("Roles from JWT: {}", userDetails.getAuthorities());
 
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);

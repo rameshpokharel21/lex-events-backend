@@ -47,7 +47,7 @@ public class EventServiceImpl implements EventService{
 
     @Override
     public List<Event> searchEvents(String keyword) {
-        return eventRepository.searchByTitleOrDescription(keyword.toLowerCase());
+        return eventRepository.searchByTitleOrDescriptionIgnoreCase(keyword.toLowerCase());
     }
 
     @Override

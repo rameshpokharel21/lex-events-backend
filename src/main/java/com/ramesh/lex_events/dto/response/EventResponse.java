@@ -1,8 +1,5 @@
 package com.ramesh.lex_events.dto.response;
 
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotNull;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -30,6 +30,7 @@ public class OtpServiceImpl implements OtpService{
     @Override
     public String generateOtp(String phoneNumber) {
         String otp = String.valueOf(ThreadLocalRandom.current().nextInt(100000, 999999));
+        //logging instead of using Twilio
         logger.info("Generated OTP for phone {}: {} ", phoneNumber, otp);
         PhoneVerification verification = new PhoneVerification();
         verification.setPhoneNumber(phoneNumber);
@@ -59,7 +60,7 @@ public class OtpServiceImpl implements OtpService{
                 userRepository.findByPhoneNumber(phoneNumber).ifPresent(user -> {
                     user.setIsPhoneVerified(true);
                     userRepository.save(user);
-                    logger.info("user {} marked as phone verified", user.getUserName());
+                    //logger.info("user {} marked as phone verified", user.getUserName());
                 });
                 return true;
             }

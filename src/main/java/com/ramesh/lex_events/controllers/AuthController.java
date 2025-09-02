@@ -18,6 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -51,17 +52,20 @@ public class AuthController {
         this.roleRepository = roleRepository;
     }
 
+
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest){
+        //logger.info("Login request received for username : {}", loginRequest.getUsername());
         Authentication authentication;
 
         try{
             authentication = authenticationManager
                     .authenticate(
-                            new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),loginRequest.getPassword() )
+                            new UsernamePasswordAuthenticationToken(loginRequest.getUsername().toLowerCase(),loginRequest.getPassword() )
                     );
 
         }catch(AuthenticationException ex){
+            logger.warn("Login failed: {}", ex.getMessage());
             Map<String, Object> map = new HashMap<>();
             map.put("message", "Bad credentials");
             map.put("status", false);
@@ -71,7 +75,7 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
-
+        //logger.info(jwtCookie.toString());
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
@@ -79,29 +83,31 @@ public class AuthController {
                 userDetails.getId(),
                 //jwtCookie.toString(),
                 "",
-                userDetails.getUsername(),
+                userDetails.getUsername().toLowerCase(),
                 userDetails.getRoleNames()
         );
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                //.header(HttpHeaders.SET_COOKIE, jwtCookie.getName() + "="+jwtCookie.getValue())
                 .body(response);
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest){
-        if(userRepository.existsByUserName(signupRequest.getUsername())){
+
+        if(userRepository.existsByUserNameIgnoreCase(signupRequest.getUsername())){
             return ResponseEntity.badRequest()
                     .body(new MessageResponse("Error: username is already taken"));
         }
 
-        if(userRepository.existsByEmail(signupRequest.getEmail())){
+        if(userRepository.existsByEmailIgnoreCase(signupRequest.getEmail())){
             return ResponseEntity.badRequest()
                     .body(new MessageResponse("Error: email is already taken."));
         }
 
-        User user = new User(signupRequest.getUsername(),
-                signupRequest.getEmail(),
+        User user = new User(signupRequest.getUsername().toLowerCase(),
+                signupRequest.getEmail().toLowerCase(),
                 signupRequest.getPhoneNumber(),
                 passwordEncoder.encode(signupRequest.getPassword()));
 

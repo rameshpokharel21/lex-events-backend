@@ -17,5 +17,5 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     @Query(
             "SELECT e FROM Event e WHERE LOWER(e.title) LIKE %:keyword% OR LOWER(e.description) LIKE %:keyword%"
     )
-    List<Event> searchByTitleOrDescription(@Param("keyword") String keyword);
+    List<Event> searchByTitleOrDescriptionIgnoreCase(@Param("keyword") String keyword);
 }

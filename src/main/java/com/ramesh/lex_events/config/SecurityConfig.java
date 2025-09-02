@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
@@ -84,8 +85,7 @@ public class SecurityConfig {
         logger.info("Starting security filterchanin");
         return  http.csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
-                .exceptionHandling(exception -> exception.accessDeniedHandler(accessDeniedHandler))
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler).accessDeniedHandler(accessDeniedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth
@@ -95,6 +95,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/api/events/**").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers("/api/user/send-otp", "/api/user/verify-phone").permitAll()
+                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Allow preflight requests
                                 .requestMatchers("/api/user/contact-preference").authenticated()
                                 .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider())
@@ -138,14 +139,14 @@ public class SecurityConfig {
             Set<Role>adminRoles = Set.of(userRole, adminRole);
 
             //create user if not exist
-            if(!userRepository.existsByUserName(userUsername.trim())){
+            if(!userRepository.existsByUserNameIgnoreCase(userUsername.trim())){
                 User newUser = new User(userUsername.trim(), userEmail.trim(),userPhone.trim(), passwordEncoder.encode(userPassword.trim()));
                 newUser = userRepository.saveAndFlush(newUser);
                 newUser.setRoles(userRoles);
                 userRepository.save(newUser);
             }
 
-            if(!userRepository.existsByUserName(adminUsername.trim())){
+            if(!userRepository.existsByUserNameIgnoreCase(adminUsername.trim())){
                 User newAdmin = new User(adminUsername.trim(), adminEmail.trim(), adminPhone.trim(), passwordEncoder.encode(adminPassword.trim()));
                 newAdmin = userRepository.saveAndFlush(newAdmin);
                 newAdmin.setRoles(adminRoles);
@@ -156,12 +157,12 @@ public class SecurityConfig {
             System.out.println("Default users and roles initialized successfully.");
 
             //update roles for users
-            userRepository.findByUserName(userUsername).ifPresent(user -> {
+            userRepository.findByUserNameIgnoreCase(userUsername).ifPresent(user -> {
                 user.setRoles(userRoles);
                 userRepository.save(user);
             });
 
-            userRepository.findByUserName(adminUsername).ifPresent(admin -> {
+            userRepository.findByUserNameIgnoreCase(adminUsername).ifPresent(admin -> {
                 admin.setRoles(adminRoles);
                 userRepository.save(admin);
             });

@@ -25,21 +25,13 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
-  /*  @Override
-    public void verifyPhoneNumber(String phoneNumber) {
-        userRepository.findByPhoneNumber(phoneNumber)
-                .ifPresent(user -> {
 
-                    user.setIsPhoneVerified(true);
-                    userRepository.save(user);
-                });
-    }*/
 
 
 
     @Override
     public Optional<User> findByUsername(String username) {
-        return userRepository.findByUserName(username);
+        return userRepository.findByUserNameIgnoreCase(username);
     }
 
     @Override
@@ -54,12 +46,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByUsername(String username) {
-        return userRepository.findByUserName(username).orElseThrow(() -> new UsernameNotFoundException("user not found with username: " + username));
+        return userRepository.findByUserNameIgnoreCase(username).orElseThrow(() -> new UsernameNotFoundException("user not found with username: " + username));
     }
 
     @Override
-    public void sendOtpForVerification(String phoneNumber) {
-        otpService.generateOtp(phoneNumber);
+    public String sendOtpForVerification(String phoneNumber) {
+        return otpService.generateOtp(phoneNumber);
     }
 
     @Override

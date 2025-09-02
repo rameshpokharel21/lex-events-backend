@@ -29,7 +29,7 @@ public class AdminController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/promote/{username}")
     public ResponseEntity<?> promoteToAdmin(@PathVariable String username){
-        Optional<User> userOpt = userRepository.findByUserName(username);
+        Optional<User> userOpt = userRepository.findByUserNameIgnoreCase(username);
         if(userOpt.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("User not found");
