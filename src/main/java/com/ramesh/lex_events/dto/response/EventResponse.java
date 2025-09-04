@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter @Setter
 public class EventResponse {
-    private Long EventId;
+    private Long eventId;
 
     private String title;
     private String description;
@@ -20,6 +20,7 @@ public class EventResponse {
     private Boolean isFree;
 
     private BigDecimal entryFee;
+    private Boolean showContactInfo;
 
     @Getter
     @Setter
