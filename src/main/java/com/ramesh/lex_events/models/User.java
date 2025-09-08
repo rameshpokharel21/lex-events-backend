@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -34,7 +35,7 @@ public class User {
     @Column(name="email", unique = true)
     private String email;
 
-    @Column(name="phone_number", unique = true)
+    @Column(name="phone_number")
     private String phoneNumber;
 
     @NotBlank
@@ -44,10 +45,9 @@ public class User {
     @JsonIgnore
     private String password;
 
-    @Column(name = "is_phone_verified")
-    private Boolean isPhoneVerified = false;
 
     @Column(name="is_email_verified")
+    @NotNull
     private Boolean isEmailVerified = false;
 
     public User(String userName, String email, String password) {

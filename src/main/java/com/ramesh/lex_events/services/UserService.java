@@ -14,7 +14,7 @@ public interface UserService {
 
     User getUserByUsername(String username);
 
-    String sendOtpForVerification(String phoneNumber);
-    boolean verifyPhoneNumber(String phoneNumber, String otp);
+    //String sendOtpForVerification(String phoneNumber);
+    //boolean verifyPhoneNumber(String phoneNumber, String otp);
 
 }

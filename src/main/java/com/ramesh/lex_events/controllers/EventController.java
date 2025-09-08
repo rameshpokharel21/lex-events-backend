@@ -40,10 +40,10 @@ public class EventController {
                                          Authentication authentication){
         String username = authentication.getName();
         User creator = userService.getUserByUsername(username);
-        if(creator.getIsPhoneVerified() == null || !creator.getIsPhoneVerified()){
+        if(creator.getIsEmailVerified() == null || !creator.getIsEmailVerified()){
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
-                    .body(new MessageResponse("Phone number not verified, Cannot create event."));
+                    .body(new MessageResponse("Email not verified, Cannot create event."));
         }
         Event event = eventMapper.toEntity(eventRequest);
         Event savedEvent = eventService.createEvent(event, creator);

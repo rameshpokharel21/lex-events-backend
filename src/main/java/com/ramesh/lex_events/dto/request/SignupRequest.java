@@ -7,8 +7,6 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.ToString;
 
-import java.util.Set;
-
 @Data
 public class SignupRequest {
     @NotBlank
@@ -20,8 +18,7 @@ public class SignupRequest {
     private String email;
 
     //private Set<String> role;
-    @NotBlank
-    @Pattern(regexp = "^\\+?[0-9]{10,15}$", message = "Invalid phone number")
+    //@Pattern(regexp = "^\\+?[0-9]{10,15}$", message = "Invalid phone number")
     private String phoneNumber;
 
     @NotBlank

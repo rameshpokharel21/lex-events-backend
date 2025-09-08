@@ -12,11 +12,11 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final OtpService otpService;
 
-    public UserServiceImpl(UserRepository userRepository, OtpService otpService) {
+
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.otpService = otpService;
+
     }
 
 
@@ -48,25 +48,6 @@ public class UserServiceImpl implements UserService {
     public User getUserByUsername(String username) {
         return userRepository.findByUserNameIgnoreCase(username).orElseThrow(() -> new UsernameNotFoundException("user not found with username: " + username));
     }
-
-    @Override
-    public String sendOtpForVerification(String phoneNumber) {
-        return otpService.generateOtp(phoneNumber);
-    }
-
-    @Override
-    public boolean verifyPhoneNumber(String phoneNumber, String otp) {
-        boolean verified = otpService.verifyOtp(phoneNumber, otp);
-        if(verified){
-            userRepository.findByPhoneNumber(phoneNumber).ifPresent(user -> {
-                user.setIsPhoneVerified(true);
-                userRepository.save(user);
-            });
-        }
-        return verified;
-    }
-
-
 
 
 }

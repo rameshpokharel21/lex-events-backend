@@ -17,6 +17,19 @@ spring:
       secret: ${JWT_SECRET}
       expirationMs: ${JWT_EXPIRATION}
       cookie: ${JWT_COOKIE}
+  mail:
+    host: smtp.mail.yahoo.com
+    port: 587
+    username: ${SENDER_EMAIL}
+    password: ${EMAIL_APP_PASSWORD}
+    properties:
+      from: ${SENDER_EMAIL}
+      mail:
+        debug: true
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 app:
   admin:
     username: ${ADMIN_USERNAME}

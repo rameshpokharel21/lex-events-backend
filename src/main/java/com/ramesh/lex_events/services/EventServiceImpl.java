@@ -24,8 +24,8 @@ public class EventServiceImpl implements EventService{
 
     @Override
     public Event createEvent(Event event, User creator) {
-        if(!creator.getIsPhoneVerified()){
-            throw new IllegalStateException("Phone number must be verified to create event.");
+        if(!creator.getIsEmailVerified()){
+            throw new IllegalStateException("Email must be verified to create event.");
         }
 
         if(event.getIsFree()){

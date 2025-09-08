@@ -42,12 +42,12 @@ class EventServiceTest {
         user = new User();
         user.setUserId(20L);
         user.setUserName("testUser");
-        user.setIsPhoneVerified(true);
+        user.setIsEmailVerified(true);
 
         unverifiedUser = new User();
         unverifiedUser.setUserId(21L);
         unverifiedUser.setUserName("unverified");
-        unverifiedUser.setIsPhoneVerified(false);
+        unverifiedUser.setIsEmailVerified(false);
     }
 
     @Test
@@ -82,7 +82,7 @@ class EventServiceTest {
         IllegalStateException exception = assertThrows(IllegalStateException.class,
                 () -> eventService.createEvent(event, unverifiedUser));
 
-        assertEquals("Phone number must be verified to create event.", exception.getMessage());
+        assertEquals("Email must be verified to create event.", exception.getMessage());
         verify(eventRepository, never()).save(any(Event.class));
     }
 

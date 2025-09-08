@@ -94,7 +94,7 @@ public class SecurityConfig {
                                 .requestMatchers("/swagger-ui/**").permitAll()
                                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/api/events/**").hasAnyRole("USER", "ADMIN")
-                                .requestMatchers("/api/user/send-otp", "/api/user/verify-phone").permitAll()
+                                .requestMatchers("/api/email/send-otp", "/api/email/verify-otp").permitAll()
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Allow preflight requests
                                 .requestMatchers("/api/user/contact-preference").authenticated()
                                 .anyRequest().authenticated())
