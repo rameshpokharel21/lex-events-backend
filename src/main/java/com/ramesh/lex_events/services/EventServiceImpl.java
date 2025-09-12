@@ -2,10 +2,14 @@ package com.ramesh.lex_events.services;
 
 import com.ramesh.lex_events.models.Event;
 import com.ramesh.lex_events.models.User;
+import com.ramesh.lex_events.repositories.EmailVerificationRepository;
 import com.ramesh.lex_events.repositories.EventRepository;
+import com.ramesh.lex_events.repositories.UserRepository;
+import com.ramesh.lex_events.utils.SecurityUtils;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -14,19 +18,19 @@ import java.util.NoSuchElementException;
 public class EventServiceImpl implements EventService{
 
     private final EventRepository eventRepository;
+    private final UserRepository userRepository;
+    private final EmailVerificationService emailVerificationService;
 
-
-    public EventServiceImpl(EventRepository eventRepository) {
+    public EventServiceImpl(EventRepository eventRepository, UserRepository userRepository, EmailVerificationService emailVerificationService) {
         this.eventRepository = eventRepository;
-
+        this.userRepository = userRepository;
+        this.emailVerificationService = emailVerificationService;
     }
 
 
     @Override
-    public Event createEvent(Event event, User creator) {
-        if(!creator.getIsEmailVerified()){
-            throw new IllegalStateException("Email must be verified to create event.");
-        }
+    public Event createEvent(Event event) {
+        User currentUser = SecurityUtils.getCurrentUser(userRepository);
 
         if(event.getIsFree()){
             event.setEntryFee(null);
@@ -35,8 +39,10 @@ public class EventServiceImpl implements EventService{
                 throw new IllegalStateException("Paid event must have a positive entry fee.");
             }
         }
-        event.setCreatedBy(creator);
-        return eventRepository.save(event);
+        event.setCreatedBy(currentUser);
+        Event saved = eventRepository.save(event);
+        emailVerificationService.clearVerificationState(currentUser);
+        return saved;
     }
 
 

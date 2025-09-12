@@ -30,7 +30,7 @@ public class EmailVerification {
     @NotNull
     private LocalDateTime expiryTime;
 
-    private Boolean isVerified = false;
+    //private Boolean isVerified = false;
 
     @ManyToOne
     @JoinColumn(name="user_id")

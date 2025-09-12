@@ -4,7 +4,7 @@ import com.ramesh.lex_events.models.EmailVerification;
 import com.ramesh.lex_events.models.User;
 import com.ramesh.lex_events.repositories.EmailVerificationRepository;
 import com.ramesh.lex_events.repositories.UserRepository;
-import com.ramesh.lex_events.security.service.UserDetailsImpl;
+import com.ramesh.lex_events.utils.SecurityUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -12,9 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -37,7 +34,7 @@ public class EmailVerificationServiceImpl implements EmailVerificationService{
 
     @Override
     public void sendOtpCode() {
-        User currentUser = getCurrentUser();
+        User currentUser = SecurityUtils.getCurrentUser(userRepository);
         String code = String.valueOf(ThreadLocalRandom.current().nextInt(100000, 999999));
         LocalDateTime expiry = LocalDateTime.now().plusMinutes(expiryMinutes);
         log.info("generated code for {} is {} ", currentUser.getEmail(), code);
@@ -46,9 +43,9 @@ public class EmailVerificationServiceImpl implements EmailVerificationService{
         emailVerification.setUser(currentUser);
         emailVerification.setVerificationCode(code);
         emailVerification.setExpiryTime(expiry);
-        emailVerification.setIsVerified(false);
-        emailRepo.save(emailVerification);
 
+        emailRepo.save(emailVerification);
+        log.info("Generated otp for {}: {}", currentUser.getEmail(), code);
         //send email
         try {
             SimpleMailMessage message = new SimpleMailMessage();
@@ -65,33 +62,45 @@ public class EmailVerificationServiceImpl implements EmailVerificationService{
     @Override
     @Transactional
     public boolean verifyOtpCode(String userInput) {
-        User currentUser = getCurrentUser();
-        Optional<EmailVerification> optional = emailRepo.findTopByUserAndIsVerifiedFalseOrderByExpiryTimeDesc(currentUser);
+        User currentUser = SecurityUtils.getCurrentUser(userRepository);
+        Optional<EmailVerification> optional = emailRepo.findTopByUserOrderByExpiryTimeDesc(currentUser);
         if(optional.isPresent()){
             EmailVerification verification = optional.get();
             boolean nonExpired = verification.getExpiryTime().isAfter(LocalDateTime.now());
-            log.info("Verification code is for {}, with {} is {}",currentUser.getEmail(), userInput, verification.getVerificationCode() );
-            if(verification.getIsVerified()) return true;
-            if(verification.getVerificationCode().equals(userInput) && nonExpired ) {
-                verification.setIsVerified(true);
-                emailRepo.save(verification);
+            if(verification.getVerificationCode().equals(userInput) && nonExpired) {
 
-                //update User record too
-               currentUser.setIsEmailVerified(true);
-               userRepository.save(currentUser);
+                //emailRepo.save(verification);
+
                return true;
             }
         }
         return false;
     }
 
-    private User getCurrentUser(){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(auth == null || !(auth.getPrincipal() instanceof UserDetails)) {
-            throw new RuntimeException("No authenticated User.");
-        }
-        Long userId = ((UserDetailsImpl)auth.getPrincipal()).getId();
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalStateException("User not found."));
+   /* @Override
+    public boolean isEmailVerified(User user) {
+       return emailRepo.existsByUserAndIsVerifiedTrue(user);
+    }*/
+
+    @Override
+    @Transactional
+    public void clearVerificationState(User user){
+       emailRepo.deleteByUser(user);
     }
+
+    @Override
+    public Optional<EmailVerification> getLatestUnexpiredCodeForUser(User user){
+       return emailRepo.findTopByUserOrderByExpiryTimeDesc(user)
+               .filter(ev -> ev.getExpiryTime().isAfter(LocalDateTime.now()));
+        /* Optional<EmailVerification> optional =
+                emailRepo.findTopByUserOrderByExpiryTimeDesc(user);
+        if(optional.isPresent() && optional.get().getExpiryTime().isAfter(LocalDateTime.now())){
+            return optional;
+        }
+        return Optional.empty();*/
+    }
+
+
+
+
 }

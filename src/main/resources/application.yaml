@@ -30,6 +30,8 @@ spring:
           auth: true
           starttls:
             enable: true
+            required: true
+
 app:
   admin:
     username: ${ADMIN_USERNAME}
@@ -41,5 +43,6 @@ app:
     password: ${USER_PASSWORD}
     email: ${USER_EMAIL}
     phone: ${USER_PHONE}
+  require-email-verification: false
 
 

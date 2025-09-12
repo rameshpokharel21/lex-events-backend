@@ -42,12 +42,12 @@ class EventServiceTest {
         user = new User();
         user.setUserId(20L);
         user.setUserName("testUser");
-        user.setIsEmailVerified(true);
+
 
         unverifiedUser = new User();
         unverifiedUser.setUserId(21L);
         unverifiedUser.setUserName("unverified");
-        unverifiedUser.setIsEmailVerified(false);
+
     }
 
     @Test
@@ -65,7 +65,7 @@ class EventServiceTest {
 
         when(eventRepository.save(any(Event.class))).thenAnswer(i -> i.getArgument(0));
 
-        Event result = eventService.createEvent(event, user);
+        Event result = eventService.createEvent(event);
 
         assertEquals("Test event", result.getTitle());
         verify(eventRepository).save(event);
@@ -80,7 +80,7 @@ class EventServiceTest {
         event.setDate(LocalDateTime.now().plusDays(2));
         event.setIsFree(true);
         IllegalStateException exception = assertThrows(IllegalStateException.class,
-                () -> eventService.createEvent(event, unverifiedUser));
+                () -> eventService.createEvent(event));
 
         assertEquals("Email must be verified to create event.", exception.getMessage());
         verify(eventRepository, never()).save(any(Event.class));

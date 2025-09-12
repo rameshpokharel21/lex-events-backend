@@ -46,10 +46,6 @@ public class User {
     private String password;
 
 
-    @Column(name="is_email_verified")
-    @NotNull
-    private Boolean isEmailVerified = false;
-
     public User(String userName, String email, String password) {
         this.userName = userName;
         this.email = email;

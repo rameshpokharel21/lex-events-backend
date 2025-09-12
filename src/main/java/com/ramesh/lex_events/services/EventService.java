@@ -11,7 +11,7 @@ import java.util.UUID;
 public interface EventService {
 
 
-    Event createEvent(Event event, User creator);
+    Event createEvent(Event event);
 
 
     List<Event> getUpcomingEvents();
