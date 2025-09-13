@@ -5,15 +5,16 @@ import com.ramesh.lex_events.dto.response.EventResponse;
 import com.ramesh.lex_events.dto.response.MessageResponse;
 import com.ramesh.lex_events.mapper.EventMapper;
 import com.ramesh.lex_events.models.Event;
+import com.ramesh.lex_events.models.User;
 import com.ramesh.lex_events.repositories.UserRepository;
 import com.ramesh.lex_events.services.EmailVerificationService;
 import com.ramesh.lex_events.services.EventService;
 import com.ramesh.lex_events.services.UserService;
+import com.ramesh.lex_events.utils.SecurityUtils;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -28,17 +29,15 @@ import java.util.stream.Collectors;
 public class EventController {
     private final EventService eventService;
     private final EventMapper eventMapper;
-    private final UserService userService;
     private final UserRepository userRepository;
     private final EmailVerificationService emailVerificationService;
 
     @Value("${app.require-email-verification}")
     private boolean requireEmailVerification;
 
-    public EventController(EventService eventService, EventMapper eventMapper, UserService userService, UserRepository userRepository, EmailVerificationService emailVerificationService) {
+    public EventController(EventService eventService, EventMapper eventMapper, UserRepository userRepository, EmailVerificationService emailVerificationService) {
         this.eventService = eventService;
         this.eventMapper = eventMapper;
-        this.userService = userService;
         this.userRepository = userRepository;
         this.emailVerificationService = emailVerificationService;
     }
@@ -46,17 +45,15 @@ public class EventController {
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PostMapping
     public ResponseEntity<?> createEvent(@RequestBody @Valid EventRequest eventRequest){
-       /* User creator = SecurityUtils.getCurrentUser(userRepository);
+        User creator = SecurityUtils.getCurrentUser(userRepository);
         if(requireEmailVerification){
-            Optional<EmailVerification> optional = emailVerificationService
-                    .getLatestUnexpiredCodeForUser(creator);
-            if(optional.isEmpty()){
+            boolean validOtp = emailVerificationService.isEmailVerified(creator);
+            if(!validOtp){
                 return ResponseEntity
                         .status(HttpStatus.FORBIDDEN)
-                        .body(new MessageResponse("OTP expired or not found.Please verify email again."));
-            }
-        }*/
-
+                        .body(new MessageResponse("OTP expired or Email not verified."));
+                }
+        }
 
         Event event = eventMapper.toEntity(eventRequest);
         log.info("Creatng event: {}", event);

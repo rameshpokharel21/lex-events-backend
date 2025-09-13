@@ -9,8 +9,8 @@ public interface EmailVerificationService {
     void sendOtpCode();
     boolean verifyOtpCode(String userInput);
 
-   // boolean isEmailVerified(User user);
+    boolean isEmailVerified(User user);
     void clearVerificationState(User user);
 
-    Optional<EmailVerification> getLatestUnexpiredCodeForUser(User user);
+    //Optional<EmailVerification> getLatestUnexpiredCodeForUser(User user);
 }

@@ -43,6 +43,9 @@ app:
     password: ${USER_PASSWORD}
     email: ${USER_EMAIL}
     phone: ${USER_PHONE}
+  verification:
+    code:
+      expiry-minutes: 15
   require-email-verification: false
 
 

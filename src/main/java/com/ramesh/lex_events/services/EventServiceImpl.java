@@ -2,14 +2,12 @@ package com.ramesh.lex_events.services;
 
 import com.ramesh.lex_events.models.Event;
 import com.ramesh.lex_events.models.User;
-import com.ramesh.lex_events.repositories.EmailVerificationRepository;
 import com.ramesh.lex_events.repositories.EventRepository;
 import com.ramesh.lex_events.repositories.UserRepository;
 import com.ramesh.lex_events.utils.SecurityUtils;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;

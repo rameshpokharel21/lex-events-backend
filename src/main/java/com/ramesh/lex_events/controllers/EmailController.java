@@ -37,12 +37,12 @@ public class EmailController {
                 : ResponseEntity.badRequest().body("Invalid or Expired code.");
     }
 
-   /* @GetMapping("/is-verified")
+    @GetMapping("/is-verified")
     public ResponseEntity<Map<String, Boolean>> isEmailVerified(){
         User user = SecurityUtils.getCurrentUser(userRepository);
         boolean verified = emailVerificationService.isEmailVerified(user);
         return ResponseEntity.ok(Map.of("verified", verified));
-    }*/
+    }
 
 
 }

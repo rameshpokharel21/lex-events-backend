@@ -1,7 +1,6 @@
 package com.ramesh.lex_events.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -30,7 +29,7 @@ public class EmailVerification {
     @NotNull
     private LocalDateTime expiryTime;
 
-    //private Boolean isVerified = false;
+    private Boolean isVerified = false;
 
     @ManyToOne
     @JoinColumn(name="user_id")
