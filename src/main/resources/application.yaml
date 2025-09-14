@@ -46,6 +46,6 @@ app:
   verification:
     code:
       expiry-minutes: 15
-  require-email-verification: false
+  require-email-verification: true
 
 

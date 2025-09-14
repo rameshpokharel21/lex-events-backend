@@ -51,7 +51,7 @@ public class JwtUtils {
     }
 
 
-    private String generateTokenFromUsername(UserDetails userDetails) {
+    public String generateTokenFromUsername(UserDetails userDetails) {
         String username = userDetails.getUsername().toLowerCase();
         return Jwts.builder()
                 .subject(username)

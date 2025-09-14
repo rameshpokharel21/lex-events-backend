@@ -24,8 +24,8 @@ import java.util.concurrent.ThreadLocalRandom;
 public class EmailVerificationServiceImpl implements EmailVerificationService{
 
     private final EmailVerificationRepository emailRepo;
-    private final UserRepository userRepository;
     private final JavaMailSender mailSender;
+    private final CurrentUserService currentUserService;
 
     @Value("${spring.mail.properties.from}")
     private  String senderEmail;
@@ -34,7 +34,7 @@ public class EmailVerificationServiceImpl implements EmailVerificationService{
 
     @Override
     public void sendOtpCode() {
-        User currentUser = SecurityUtils.getCurrentUser(userRepository);
+        User currentUser = currentUserService.getCurrentUser();
         String code = String.valueOf(ThreadLocalRandom.current().nextInt(100000, 999999));
         LocalDateTime expiry = LocalDateTime.now().plusMinutes(expiryMinutes);
         //log.info("generated code for {} is {} ", currentUser.getEmail(), code);
@@ -61,7 +61,7 @@ public class EmailVerificationServiceImpl implements EmailVerificationService{
     @Override
     @Transactional
     public boolean verifyOtpCode(String userInput) {
-        User currentUser = SecurityUtils.getCurrentUser(userRepository);
+        User currentUser = currentUserService.getCurrentUser();
         Optional<EmailVerification> optional = emailRepo.findTopByUserAndIsVerifiedFalseOrderByExpiryTimeDesc(currentUser);
         if(optional.isPresent()){
             EmailVerification verification = optional.get();
