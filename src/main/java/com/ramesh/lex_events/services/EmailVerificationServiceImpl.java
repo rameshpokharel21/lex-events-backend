@@ -3,8 +3,6 @@ package com.ramesh.lex_events.services;
 import com.ramesh.lex_events.models.EmailVerification;
 import com.ramesh.lex_events.models.User;
 import com.ramesh.lex_events.repositories.EmailVerificationRepository;
-import com.ramesh.lex_events.repositories.UserRepository;
-import com.ramesh.lex_events.utils.SecurityUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ramesh</groupId>
-	<artifactId>lex_events</artifactId>
+	<artifactId>lex-events-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>lex_events</name>
 	<description>Demo project for Spring Boot</description>
@@ -101,6 +101,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>app</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

@@ -4,33 +4,31 @@ import com.ramesh.lex_events.models.Event;
 import com.ramesh.lex_events.models.User;
 import com.ramesh.lex_events.repositories.EventRepository;
 import com.ramesh.lex_events.repositories.UserRepository;
-import com.ramesh.lex_events.utils.SecurityUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Log4j2
 @Service
 public class EventServiceImpl implements EventService{
 
     private final EventRepository eventRepository;
-    private final UserRepository userRepository;
     private final EmailVerificationService emailVerificationService;
+    private final CurrentUserService currentUserService;
 
-    public EventServiceImpl(EventRepository eventRepository, UserRepository userRepository, EmailVerificationService emailVerificationService) {
+    public EventServiceImpl(EventRepository eventRepository, UserRepository userRepository, EmailVerificationService emailVerificationService, CurrentUserService currentUserService) {
         this.eventRepository = eventRepository;
-        this.userRepository = userRepository;
         this.emailVerificationService = emailVerificationService;
+        this.currentUserService = currentUserService;
     }
 
 
     @Override
     public Event createEvent(Event event) {
-        User currentUser = SecurityUtils.getCurrentUser(userRepository);
+        User currentUser = currentUserService.getCurrentUser();
 
         if(event.getIsFree()){
             event.setEntryFee(null);

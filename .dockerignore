@@ -1,0 +1,23 @@
+# ignore build output
+target/*
+!target/app.jar
+target/*.original
+
+#ignore git
+.git
+.gitignore
+
+#ignore local env files
+.env
+
+#ignore ide files
+.idea/
+*.iml
+
+#ignore docker itself(avoids recursion)
+Dockerfile
+
+
+#others
+run.sh
+README.md

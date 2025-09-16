@@ -1,5 +1,8 @@
 HELP.md
-target/
+/target/*
+!/target/app.jar
+/target/*.original
+
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
@@ -34,3 +37,4 @@ build/
 
 ### others
 .env
+run.sh

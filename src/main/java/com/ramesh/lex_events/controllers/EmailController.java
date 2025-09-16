@@ -3,15 +3,11 @@ package com.ramesh.lex_events.controllers;
 
 import com.ramesh.lex_events.dto.request.OtpVerificationRequest;
 import com.ramesh.lex_events.models.User;
-import com.ramesh.lex_events.repositories.UserRepository;
 import com.ramesh.lex_events.services.CurrentUserService;
 import com.ramesh.lex_events.services.EmailVerificationService;
-import com.ramesh.lex_events.services.UserService;
-import com.ramesh.lex_events.utils.SecurityUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
