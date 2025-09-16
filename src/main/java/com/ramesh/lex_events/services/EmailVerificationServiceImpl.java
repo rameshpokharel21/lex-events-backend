@@ -50,7 +50,7 @@ public class EmailVerificationServiceImpl implements EmailVerificationService{
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(currentUser.getEmail());
             message.setSubject("Your Otp Verification Code");
-            message.setText("Use this code to verify your email: " + code);
+            message.setText("Use this code to verify your email:\n" + code);
             message.setFrom(senderEmail);
             mailSender.send(message);
         } catch (MailException e) {
