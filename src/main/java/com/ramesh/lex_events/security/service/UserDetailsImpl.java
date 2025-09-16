@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -22,10 +23,10 @@ public class UserDetailsImpl implements UserDetails {
         return user.getUserId();
     }
 
-    public List<String> getRoleNames(){
+    public Set<String> getRoleNames(){
         return user.getRoles().stream()
                 .map(role -> role.getRoleName().name())
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
 

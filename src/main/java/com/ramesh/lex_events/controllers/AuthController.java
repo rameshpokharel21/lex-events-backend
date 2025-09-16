@@ -75,9 +75,9 @@ public class AuthController {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
         //logger.info(jwtCookie.toString());
-        List<String> roles = userDetails.getAuthorities().stream()
+        Set<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
         LoginResponse response = new LoginResponse(
                 userDetails.getId(),
                 //jwtCookie.toString(),
@@ -122,9 +122,9 @@ public class AuthController {
     @GetMapping("/user")
     public ResponseEntity<?> getUserDetails(Authentication authentication){
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
+        Set<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
         LoginResponse response = new LoginResponse(userDetails.getId(),
                 userDetails.getUsername(), roles);
         return ResponseEntity.ok().body(response);

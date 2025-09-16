@@ -1,7 +1,9 @@
 package com.ramesh.lex_events.services;
 
+import com.ramesh.lex_events.dto.response.UserResponse;
 import com.ramesh.lex_events.models.User;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
@@ -14,7 +16,6 @@ public interface UserService {
 
     User getUserByUsername(String username);
 
-    //String sendOtpForVerification(String phoneNumber);
-    //boolean verifyPhoneNumber(String phoneNumber, String otp);
+    List<UserResponse> getAllUsers();
 
 }

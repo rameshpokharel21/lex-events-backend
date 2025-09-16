@@ -5,6 +5,7 @@ import com.ramesh.lex_events.models.User;
 import com.ramesh.lex_events.repositories.EventRepository;
 import com.ramesh.lex_events.repositories.UserRepository;
 import com.ramesh.lex_events.utils.SecurityUtils;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+@Log4j2
 @Service
 public class EventServiceImpl implements EventService{
 
@@ -57,6 +59,14 @@ public class EventServiceImpl implements EventService{
     @Override
     public Event getEventById(Long id) {
         return eventRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Event not found with id: " + id));
+                .orElseThrow(() -> new IllegalStateException("Event not found with id: " + id));
+    }
+
+    @Override
+    public void deleteEventById(Long id) {
+        log.info("inside deleteEventById with id: {}", id);
+        Event event = getEventById(id);
+        eventRepository.delete(event);
+        log.info("Deleted event with id: {}", id);
     }
 }

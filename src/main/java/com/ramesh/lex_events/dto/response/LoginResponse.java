@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -20,9 +21,9 @@ public class LoginResponse {
     private String jwtCookie;
     private String username;
 
-    private List<String> roles;
+    private Set<String> roles;
 
-    public LoginResponse(Long userId, String username, List<String> roles) {
+    public LoginResponse(Long userId, String username, Set<String> roles) {
         this.userId = userId;
         this.username = username;
         this.roles = roles;
