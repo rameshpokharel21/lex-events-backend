@@ -1,14 +1,13 @@
-#official openjdk 21 base image
+#Multi-stage Docker
+#stage 1: build the jar
 FROM eclipse-temurin:21-jdk-alpine
-
-#working directory
 WORKDIR /app
+COPY . .
+RUN ./mvnw clean package -DskipTests
 
-#Copy source and build
-COPY target/app.jar app.jar
-
-#expose port
+#state 2: run the app
+FROM eclipse-temurin:21-jdk-alpine
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 9000
-
-#Run the jar
 ENTRYPOINT ["java", "-jar", "app.jar"]

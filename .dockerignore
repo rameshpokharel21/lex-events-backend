@@ -1,7 +1,6 @@
 # ignore build output
-target/*
-!target/app.jar
 target/*.original
+target/*.log
 
 #ignore git
 .git
@@ -13,6 +12,7 @@ target/*.original
 #ignore ide files
 .idea/
 *.iml
+*.log
 
 #ignore docker itself(avoids recursion)
 Dockerfile
@@ -20,4 +20,3 @@ Dockerfile
 
 #others
 run.sh
-README.md
