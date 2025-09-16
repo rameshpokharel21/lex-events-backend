@@ -1,6 +1,6 @@
 #Multi-stage Docker
 #stage 1: build the jar
-FROM eclipse-temurin:21-jdk-alpine
+FROM eclipse-temurin:21-jdk-alpine AS build
 WORKDIR /app
 COPY . .
 RUN ./mvnw clean package -DskipTests
