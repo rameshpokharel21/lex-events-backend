@@ -50,7 +50,7 @@ public class EventController {
         }
 
         Event event = eventMapper.toEntity(eventRequest);
-        log.info("Creatng event: {}", event);
+        //log.info("Creatng event: {}", event);
         try{
             Event savedEvent = eventService.createEvent(event);
             return ResponseEntity.ok(eventMapper.toResponse(savedEvent));
