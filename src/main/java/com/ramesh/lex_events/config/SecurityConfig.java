@@ -94,13 +94,13 @@ public class SecurityConfig {
                                 .requestMatchers("/swagger-ui/**").permitAll()
                                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/api/events/**").hasAnyRole("USER", "ADMIN")
-                                .requestMatchers("/api/email/send-otp", "/api/email/verify-otp").permitAll()
+                                .requestMatchers("/api/email/send-otp", "/api/email/verify-otp").hasRole("USER")
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Allow preflight requests
                                 .requestMatchers("/api/user/contact-preference").authenticated()
                                 .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class)
-                .httpBasic(Customizer.withDefaults())
+                //.httpBasic(Customizer.withDefaults())
                 .build();
     }
 
