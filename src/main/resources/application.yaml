@@ -47,8 +47,6 @@ app:
     code:
       expiry-minutes: 15
   require-email-verification: true
-  cors:
-    allowed-origins:
-      - http://localhost:5173
+
 
 
