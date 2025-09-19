@@ -2,6 +2,7 @@ package com.ramesh.lex_events.controllers;
 
 
 import com.ramesh.lex_events.dto.request.OtpVerificationRequest;
+import com.ramesh.lex_events.dto.response.VerificationStatusResponse;
 import com.ramesh.lex_events.models.User;
 import com.ramesh.lex_events.services.CurrentUserService;
 import com.ramesh.lex_events.services.EmailVerificationService;
@@ -35,10 +36,10 @@ public class EmailController {
     }
 
     @GetMapping("/is-verified")
-    public ResponseEntity<Map<String, Boolean>> isEmailVerified(){
+    public ResponseEntity<VerificationStatusResponse> isEmailVerified(){
         User user = currentUserService.getCurrentUser();
-        boolean verified = emailVerificationService.isEmailVerified(user);
-        return ResponseEntity.ok(Map.of("verified", verified));
+        VerificationStatusResponse status  = emailVerificationService.isEmailVerified(user);
+        return ResponseEntity.ok(status);
     }
 
 

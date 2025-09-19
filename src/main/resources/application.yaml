@@ -45,7 +45,7 @@ app:
     phone: ${USER_PHONE}
   verification:
     code:
-      expiry-minutes: 15
+      expiry-minutes: 10
   require-email-verification: true
   cors:
     allowed-origin: https://bhetau.com

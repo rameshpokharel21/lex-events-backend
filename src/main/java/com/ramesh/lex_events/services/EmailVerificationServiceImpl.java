@@ -1,11 +1,13 @@
 package com.ramesh.lex_events.services;
 
+import com.ramesh.lex_events.dto.response.VerificationStatusResponse;
 import com.ramesh.lex_events.models.EmailVerification;
 import com.ramesh.lex_events.models.User;
 import com.ramesh.lex_events.repositories.EmailVerificationRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.mapstruct.control.MappingControl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -27,7 +29,7 @@ public class EmailVerificationServiceImpl implements EmailVerificationService{
 
     @Value("${spring.mail.properties.from}")
     private  String senderEmail;
-    @Value("${app.verification.code.expiry-minutes:15}")
+    @Value("${app.verification.code.expiry-minutes:10}")
     private long expiryMinutes;
 
     @Override
@@ -82,11 +84,14 @@ public class EmailVerificationServiceImpl implements EmailVerificationService{
     }
 
 
-
     @Override
-    public boolean isEmailVerified(User user){
+    public VerificationStatusResponse isEmailVerified(User user){
         Optional<EmailVerification> latest = emailRepo.findTopByUserAndIsVerifiedTrueOrderByExpiryTimeDesc(user);
-        return latest.isPresent() && latest.get().getExpiryTime().isAfter(LocalDateTime.now());
+        if(latest.isPresent() && latest.get().getExpiryTime().isAfter(LocalDateTime.now())){
+            return new VerificationStatusResponse(true, latest.get().getExpiryTime());
+
+        }
+        return new VerificationStatusResponse(false, null);
     }
 
 
