@@ -39,7 +39,7 @@ public class EventServiceImpl implements EventService{
         }
         event.setCreatedBy(currentUser);
         Event saved = eventRepository.save(event);
-        emailVerificationService.clearVerificationState(currentUser);
+        //emailVerificationService.clearVerificationState(currentUser);
         return saved;
     }
 
