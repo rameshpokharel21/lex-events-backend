@@ -3,6 +3,7 @@ package com.ramesh.lex_events.controllers;
 import com.ramesh.lex_events.dto.request.EventRequest;
 import com.ramesh.lex_events.dto.response.ErrorResponse;
 import com.ramesh.lex_events.dto.response.EventResponse;
+import com.ramesh.lex_events.dto.response.VerificationStatusResponse;
 import com.ramesh.lex_events.mapper.EventMapper;
 import com.ramesh.lex_events.models.Event;
 import com.ramesh.lex_events.models.User;
@@ -41,8 +42,8 @@ public class EventController {
     public ResponseEntity<?> createEvent(@RequestBody @Valid EventRequest eventRequest){
         User creator = currentUserService.getCurrentUser();
         if(requireEmailVerification){
-            boolean validOtp = emailVerificationService.isEmailVerified(creator);
-            if(!validOtp){
+            VerificationStatusResponse status = emailVerificationService.isEmailVerified(creator);
+            if(!status.isVerified()){
                 return ResponseEntity
                         .status(HttpStatus.FORBIDDEN)
                         .body(new ErrorResponse("OTP expired or Email not verified."));
