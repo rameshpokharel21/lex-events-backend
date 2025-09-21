@@ -51,7 +51,7 @@ public class EventController {
         }
 
         Event event = eventMapper.toEntity(eventRequest);
-        //log.info("Creatng event: {}", event);
+        //log.info("Creating event: {}", event);
         try{
             Event savedEvent = eventService.createEvent(event);
             return ResponseEntity.ok(eventMapper.toResponse(savedEvent));
@@ -85,4 +85,14 @@ public class EventController {
         EventResponse response = eventMapper.toResponse(event);
         return ResponseEntity.ok(response);
     }
+
+    @PreAuthorize("hasRole('ADMIN') or @eventSecurity.isOwner(#id)")
+    @PutMapping("/{id}")
+    public ResponseEntity<EventResponse> updateEvent(@PathVariable Long id, @RequestBody @Valid EventRequest request){
+        Event event = eventService.updateEvent(id, request);
+        EventResponse response= eventMapper.toResponse(event);
+        return ResponseEntity.ok(response);
+    }
+
+
 }

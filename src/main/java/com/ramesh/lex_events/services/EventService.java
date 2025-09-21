@@ -1,12 +1,9 @@
 package com.ramesh.lex_events.services;
 
+import com.ramesh.lex_events.dto.request.EventRequest;
 import com.ramesh.lex_events.models.Event;
-import com.ramesh.lex_events.models.User;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
-
 
 public interface EventService {
 
@@ -21,4 +18,7 @@ public interface EventService {
     Event getEventById(Long id);
 
     void deleteEventById(Long id);
+
+    Event updateEvent(Long id, EventRequest request);
+    boolean isOwner(Long eventId);
 }

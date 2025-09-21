@@ -35,4 +35,4 @@ build/
 
 ### others
 .env
-run.sh
+/run.sh

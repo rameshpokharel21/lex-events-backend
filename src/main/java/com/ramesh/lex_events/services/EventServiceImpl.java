@@ -1,15 +1,18 @@
 package com.ramesh.lex_events.services;
 
+import com.ramesh.lex_events.dto.request.EventRequest;
 import com.ramesh.lex_events.models.Event;
 import com.ramesh.lex_events.models.User;
 import com.ramesh.lex_events.repositories.EventRepository;
 import com.ramesh.lex_events.repositories.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Log4j2
 @Service
@@ -67,4 +70,29 @@ public class EventServiceImpl implements EventService{
         eventRepository.delete(event);
         log.info("Deleted event with id: {}", id);
     }
+
+    @Override
+    public Event updateEvent(Long id, EventRequest request) {
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("No event with id: " + id));
+        event.setTitle(request.getTitle());
+        event.setDescription(request.getDescription());
+        event.setLocation(request.getLocation());
+        event.setDate(request.getDate());
+        event.setIsFree(request.getIsFree());
+        event.setEntryFee(request.getIsFree() ? null :  request.getEntryFee());
+        event.setShowContactInfo(request.getShowContactInfo());
+        Event savedEvent = eventRepository.save(event);
+        return savedEvent;
+    }
+
+    @Override
+    public boolean isOwner(Long eventId) {
+        String currentUsername = currentUserService.getCurrentUser().getUserName();
+        Optional<Event> eventOpt = eventRepository.findById(eventId);
+        return eventOpt.isPresent() &&
+                eventOpt.get().getCreatedBy().getUserName().equals(currentUsername);
+    }
+
+
 }
