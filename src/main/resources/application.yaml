@@ -48,6 +48,6 @@ app:
       expiry-minutes: 10
   require-email-verification: true
   cors:
-    allowed-origin: ALLOWED_ORIGIN
+    allowed-origin: https://bhetau.com
 
 
