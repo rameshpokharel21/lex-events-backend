@@ -48,6 +48,7 @@ app:
       expiry-minutes: 10
   require-email-verification: true
   cors:
-    allowed-origin: https://bhetau.com
+    allowed-origin: http://localhost:5173
+    #https://bhetau.com
 
 
