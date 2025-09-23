@@ -43,8 +43,8 @@ import java.util.Set;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    @Value("${app.cors.allowed-origin}")
-    private String allowedOrigin;
+    @Value("${app.cors.allowed-origins}")
+    private List<String> allowedOrigins;
 
     private final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
@@ -179,12 +179,13 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of(allowedOrigin));
+        config.setAllowedOrigins(allowedOrigins);
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
+        config.setMaxAge(3600L); //1 hour cache
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
+        source.registerCorsConfiguration("/api/**", config);
         return source;
     }
 }
