@@ -15,10 +15,14 @@ spring:
 app:
   verification:
     code:
-      expiry-minutes: 15
+      expiry-minutes: 10
   require-email-verification: true
 
 logging:
   level:
     root: WARN
     com.ramesh.lex_events: DEBUG
+brevo:
+  api:
+    url: http://localhost:8080/mock-brevo
+    key: test-key
