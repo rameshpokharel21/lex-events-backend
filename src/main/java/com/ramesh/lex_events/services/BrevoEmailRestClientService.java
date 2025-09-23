@@ -4,6 +4,7 @@ package com.ramesh.lex_events.services;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -38,20 +39,23 @@ public class BrevoEmailRestClientService {
         );
 
         try{
-            ResponseEntity<Void> response = restClient.post()
+            String response = restClient.post()
                     .uri("/smtp/email")
                     .body(emailBody)
                     .retrieve()
-                    .toEntity(Void.class);
-
-            if(response.getStatusCode().is2xxSuccessful()){
-                log.info("OTP email sent successfully to {}", to);
-            }else{
-                log.error("Failed to send email via Brevo: Status: {}, Body={}", response.getStatusCode(), response.getBody());
-            }
+                    .onStatus(status -> status == HttpStatus.UNAUTHORIZED, (request, response) -> {
+                        throw new RuntimeException("Invalid Brevo API key");
+                    })
+                    .onStatus(status -> status == HttpStatus.BAD_REQUEST, (request, response) -> {
+                        String error = new String(response.getBody().readAllBytes());
+                        throw new RuntimeException("Bad request to Brevo: " + error);
+                    })
+                    .body(String.class);
+            log.info("OTP email sent successfully to {}", to);
 
         }catch(Exception e){
             log.error("Exception while sending email via Brevo API: {}", e.getMessage());
+            throw new RuntimeException("Failed to send email: " + e.getMessage(), e);
         }
     }
 

@@ -8,7 +8,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -43,7 +42,7 @@ public class EmailVerificationServiceImpl implements EmailVerificationService{
         //send email
         try {
           brevoEmailRestClientService.sendOtpEmail(currentUser.getEmail(), code);
-        } catch (MailException e) {
+        } catch (Exception e) {
            log.error("error sending email: {}", e.getMessage());
         }
     }
