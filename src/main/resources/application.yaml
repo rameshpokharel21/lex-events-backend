@@ -17,21 +17,6 @@ spring:
       secret: ${JWT_SECRET}
       expirationMs: ${JWT_EXPIRATION}
       cookie: ${JWT_COOKIE}
-  mail:
-    host: smtp-relay.brevo.com
-    port: 587
-    username: ${SENDER_EMAIL}
-    password: ${EMAIL_APP_PASSWORD}
-    properties:
-      from: ${SENDER_EMAIL}
-      mail:
-        debug: false
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-            required: true
-          timeout: 5000
 
 
 app:
@@ -51,5 +36,11 @@ app:
   require-email-verification: true
   cors:
     allowed-origin: https://bhetau.com
+brevo:
+  api:
+    url: ${BREVO_API_URL}
+    key: ${BREVO_API_KEY}
+  sender:
+    email: ${SENDER_EMAIL}
 
 

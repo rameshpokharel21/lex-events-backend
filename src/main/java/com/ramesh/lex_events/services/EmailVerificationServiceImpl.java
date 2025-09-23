@@ -7,11 +7,8 @@ import com.ramesh.lex_events.repositories.EmailVerificationRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.mapstruct.control.MappingControl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,12 +20,10 @@ import java.util.concurrent.ThreadLocalRandom;
 @RequiredArgsConstructor
 public class EmailVerificationServiceImpl implements EmailVerificationService{
 
+    private final BrevoEmailRestClientService brevoEmailRestClientService;
     private final EmailVerificationRepository emailRepo;
-    private final JavaMailSender mailSender;
     private final CurrentUserService currentUserService;
 
-    @Value("${spring.mail.properties.from}")
-    private  String senderEmail;
     @Value("${app.verification.code.expiry-minutes:10}")
     private long expiryMinutes;
 
@@ -47,12 +42,7 @@ public class EmailVerificationServiceImpl implements EmailVerificationService{
         emailRepo.save(emailVerification);
         //send email
         try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setTo(currentUser.getEmail());
-            message.setSubject("Your Otp Verification Code");
-            message.setText("Use this code to verify your email:\n" + code);
-            message.setFrom(senderEmail);
-            mailSender.send(message);
+          brevoEmailRestClientService.sendOtpEmail(currentUser.getEmail(), code);
         } catch (MailException e) {
            log.error("error sending email: {}", e.getMessage());
         }
