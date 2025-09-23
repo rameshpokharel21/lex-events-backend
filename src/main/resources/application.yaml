@@ -18,7 +18,7 @@ spring:
       expirationMs: ${JWT_EXPIRATION}
       cookie: ${JWT_COOKIE}
   mail:
-    host: smtp.office365.com
+    host: smtp-relay.brevo.com
     port: 587
     username: ${SENDER_EMAIL}
     password: ${EMAIL_APP_PASSWORD}
@@ -31,6 +31,8 @@ spring:
           starttls:
             enable: true
             required: true
+          timeout: 5000
+
 
 app:
   admin:
@@ -49,6 +51,5 @@ app:
   require-email-verification: true
   cors:
     allowed-origin: https://bhetau.com
-    #http://localhost:5173
 
 
