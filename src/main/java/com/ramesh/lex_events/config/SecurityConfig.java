@@ -43,8 +43,8 @@ import java.util.Set;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    @Value("${app.cors.allowed-origins}")
-    private List<String> allowedOrigins;
+//    @Value("${app.cors.allowed-origins}")
+//    private List<String> allowedOrigins;
 
     private final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
@@ -179,7 +179,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(allowedOrigins);
+        config.setAllowedOrigins(List.of("https://bhetau.com", "https://www.bhetau.com"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

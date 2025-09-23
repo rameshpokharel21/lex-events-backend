@@ -34,10 +34,10 @@ app:
     code:
       expiry-minutes: 10
   require-email-verification: true
-  cors:
-    allowed-origins:
-      - https://bhetau.com
-      - https://www.bhetau.com
+#  cors:
+#    allowed-origins:
+#      - https://bhetau.com
+#      - https://www.bhetau.com
 brevo:
   api:
     url: ${BREVO_API_URL}
