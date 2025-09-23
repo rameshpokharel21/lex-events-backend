@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -39,7 +38,7 @@ public class BrevoEmailRestClientService {
         );
 
         try{
-            String response = restClient.post()
+            String responseString = restClient.post()
                     .uri("/smtp/email")
                     .body(emailBody)
                     .retrieve()
