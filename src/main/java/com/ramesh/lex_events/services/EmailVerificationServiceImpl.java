@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -65,14 +66,6 @@ public class EmailVerificationServiceImpl implements EmailVerificationService{
         return false;
     }
 
-
-    @Override
-    @Transactional
-    public void clearVerificationState(User user){
-       emailRepo.deleteByUser(user);
-    }
-
-
     @Override
     public VerificationStatusResponse isEmailVerified(User user){
         Optional<EmailVerification> latest = emailRepo.findTopByUserAndIsVerifiedTrueOrderByExpiryTimeDesc(user);
@@ -81,6 +74,14 @@ public class EmailVerificationServiceImpl implements EmailVerificationService{
 
         }
         return new VerificationStatusResponse(false, null);
+    }
+
+    @Override
+    @Scheduled(cron = "0 0 * * * *")
+    @Transactional
+    public void cleanExpiredVerifications() {
+        int deleted = emailRepo.deleteByExpiryTimeBefore(LocalDateTime.now());
+        log.info("Cleaned up {} expired email verifications records", deleted);
     }
 
 

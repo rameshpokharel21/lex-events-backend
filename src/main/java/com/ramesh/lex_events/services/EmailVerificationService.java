@@ -1,17 +1,13 @@
 package com.ramesh.lex_events.services;
 
 import com.ramesh.lex_events.dto.response.VerificationStatusResponse;
-import com.ramesh.lex_events.models.EmailVerification;
 import com.ramesh.lex_events.models.User;
-
-import java.util.Optional;
 
 public interface EmailVerificationService {
     void sendOtpCode();
     boolean verifyOtpCode(String userInput);
 
     VerificationStatusResponse isEmailVerified(User user);
-    void clearVerificationState(User user);
+    void cleanExpiredVerifications();
 
-    //Optional<EmailVerification> getLatestUnexpiredCodeForUser(User user);
 }
