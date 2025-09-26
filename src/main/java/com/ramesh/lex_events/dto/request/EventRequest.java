@@ -1,5 +1,6 @@
 package com.ramesh.lex_events.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ramesh.lex_events.validator.ValidEntryFee;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
@@ -26,6 +27,7 @@ public class EventRequest {
     private String location;
 
     @NotNull(message = "Event date and time is required.")
+    @JsonFormat(pattern= "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime date;
 
     @NotNull(message = "Please specify if the event is free or paid.")
