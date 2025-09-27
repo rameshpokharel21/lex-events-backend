@@ -121,6 +121,9 @@ public class AuthController {
 
     @GetMapping("/user")
     public ResponseEntity<?> getUserDetails(Authentication authentication){
+        if(authentication == null || !authentication.isAuthenticated()){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated.");
+        }
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         Set<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
