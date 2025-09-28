@@ -19,12 +19,10 @@ import java.util.Optional;
 public class EventServiceImpl implements EventService{
 
     private final EventRepository eventRepository;
-    private final EmailVerificationService emailVerificationService;
     private final CurrentUserService currentUserService;
 
-    public EventServiceImpl(EventRepository eventRepository, UserRepository userRepository, EmailVerificationService emailVerificationService, CurrentUserService currentUserService) {
+    public EventServiceImpl(EventRepository eventRepository, UserRepository userRepository, CurrentUserService currentUserService) {
         this.eventRepository = eventRepository;
-        this.emailVerificationService = emailVerificationService;
         this.currentUserService = currentUserService;
     }
 

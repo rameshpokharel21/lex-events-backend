@@ -32,7 +32,7 @@ app:
     phone: ${USER_PHONE}
   verification:
     code:
-      expiry-minutes: 5
+      expiry-minutes: 10
   require-email-verification: true
   cors:
     allowed-origins: "https://bhetau.com,https://www.bhetau.com"
