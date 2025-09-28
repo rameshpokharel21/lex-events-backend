@@ -121,16 +121,21 @@ public class AuthController {
 
     @GetMapping("/user")
     public ResponseEntity<?> getUserDetails(Authentication authentication){
-        if(authentication == null || !authentication.isAuthenticated()){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated.");
+        try{
+            if(authentication == null || !authentication.isAuthenticated()){
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated.");
+            }
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            Set<String> roles = userDetails.getAuthorities().stream()
+                    .map(item -> item.getAuthority())
+                    .collect(Collectors.toSet());
+            LoginResponse response = new LoginResponse(userDetails.getId(),
+                    userDetails.getUsername(), roles);
+            return ResponseEntity.ok().body(response);
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                    .body("Server is starting up, please try again1");
         }
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        Set<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toSet());
-        LoginResponse response = new LoginResponse(userDetails.getId(),
-                userDetails.getUsername(), roles);
-        return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/logout")
