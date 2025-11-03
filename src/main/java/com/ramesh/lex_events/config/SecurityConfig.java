@@ -107,7 +107,7 @@ public class SecurityConfig {
                                 .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class)
-                //.httpBasic(Customizer.withDefaults())
+
                 .build();
     }
 
