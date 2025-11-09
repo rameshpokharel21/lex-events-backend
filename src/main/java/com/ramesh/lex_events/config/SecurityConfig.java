@@ -93,6 +93,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth
                                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/api/auth/user").hasRole("USER")
                                 .requestMatchers("/api/events/**").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/logout").permitAll()
                                 .requestMatchers("/api/email/send-otp", "/api/email/verify-otp").hasRole("USER")
@@ -102,7 +103,7 @@ public class SecurityConfig {
 
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Allow preflight requests
                                 .requestMatchers("/api/user/contact-preference").authenticated()
-                                .requestMatchers("/api/auth/**").permitAll()
+                                //.requestMatchers("/api/auth/**").permitAll()
                                 .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class)
