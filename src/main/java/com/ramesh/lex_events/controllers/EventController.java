@@ -86,7 +86,7 @@ public class EventController {
         return ResponseEntity.ok(response);
     }
 
-    @PreAuthorize("hasRole('ADMIN') or @eventSecurity.isOwner(#id)")
+    @PreAuthorize("hasRole('ADMIN') or @eventServiceImpl.isOwner(#id)")
     @PutMapping("/{id}")
     public ResponseEntity<EventResponse> updateEvent(@PathVariable Long id, @RequestBody @Valid EventRequest request){
         Event event = eventService.updateEvent(id, request);
