@@ -49,6 +49,7 @@ public class JwtUtils {
                 .httpOnly(true)
                 .secure(true)
                 .sameSite("None")
+                .partitioned(true)
                 .build();
     }
 
@@ -67,6 +68,10 @@ public class JwtUtils {
         return ResponseCookie.from(jwtCookie, "")
                 .path("/")
                 .maxAge(0)
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
+                .partitioned(true)
                 .build();
     }
 

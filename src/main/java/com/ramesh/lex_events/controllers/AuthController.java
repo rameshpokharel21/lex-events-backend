@@ -87,7 +87,7 @@ public class AuthController {
         );
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString() + "; Partitioned")
                 //.header(HttpHeaders.SET_COOKIE, jwtCookie.getName() + "="+jwtCookie.getValue())
                 .body(response);
     }
@@ -142,7 +142,7 @@ public class AuthController {
     public ResponseEntity<?> signOutUser(){
         ResponseCookie cookie = jwtUtils.clearJwtCookie();
         return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .header(HttpHeaders.SET_COOKIE, cookie.toString() + "; Partitioned")
                 .body(new MessageResponse("You've been logged out!"));
     }
 
